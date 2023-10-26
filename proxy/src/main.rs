@@ -42,7 +42,6 @@ async fn main() -> Result<(), hyper::Error> {
     // load env variables and the service configuration
 
     dotenv::dotenv().ok();
-    // parsers::parse_config("auth");
     let val = parsers::parse_config("auth").unwrap();
     println!("{:?}", val);
 
