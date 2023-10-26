@@ -16,6 +16,8 @@ use tower_http::cors::{Any, CorsLayer};
 use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 
+mod parsers;
+
 // register the services
 lazy_static! {
     static ref PROXY_SERVER: String = ServicePath::from_env("PROXY_SERVER", "http://0.0.0.0:5000");
@@ -37,8 +39,12 @@ lazy_static! {
 
 #[tokio::main]
 async fn main() -> Result<(), hyper::Error> {
-    // load env variables
+    // load env variables and the service configuration
+
     dotenv::dotenv().ok();
+    // parsers::parse_config("auth");
+    let val = parsers::parse_config("auth").unwrap();
+    println!("{:?}", val);
 
     tracing_subscriber::registry()
         .with(tracing_subscriber::EnvFilter::new(
@@ -73,7 +79,7 @@ async fn main() -> Result<(), hyper::Error> {
 
     // run it
     let addr = SocketAddr::from(([0, 0, 0, 0], 5000));
-
+    println!("server running on {address}", address = addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await
