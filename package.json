@@ -1,0 +1,13 @@
+{
+  "name": "martus",
+  "version": "1.0.0",
+  "description": "yet another open source school management software",
+  "main": "index.js",
+  "repository": "https://github.com/opeolluwa/martus",
+  "author": "Adeoye Adefemi <adefemiadeoye@yahoo.com>",
+  "license": "BSD 2-Clause ",
+  "private": false,
+  "scripts": {
+    "watch:rust":"cd $PATH && cargo watch -x run"
+  }
+}
