@@ -1,5 +1,10 @@
 {
   "cSpell.words": [
     "Martus"
-  ]
+  ],
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#043434",
+    "titleBar.activeBackground": "#054848",
+    "titleBar.activeForeground": "#ECFEFE"
+  }
 }
