@@ -50,6 +50,7 @@ cd martus
 ### Executing program
 
 The project is best managed with [nx](https://nx.dev) editor plugin
+![NX console](./nx-console.png)
 
 _TO run a project from the command line, consider installing nx globally `npm  i -g nx`_
 
