@@ -1,0 +1,19 @@
+[package]
+edition = "2021"
+name = "proxy"
+version = "0.1.0"
+
+[dependencies]
+axum = {version = "0.6.20", features = ["headers"]}
+dotenv = "0.15.0"
+futures = "0.3.28"
+hyper = {version = "0.14.27", features = ["client"]}
+lazy_static = "1.4.0"
+serde_json = "1.0.107"
+tokio = {version = "1.32.0", features = ["macros", "rt-multi-thread"]}
+toml = "0.8.4"
+tower-http = {version = "0.4.0", features = ["trace", "cors"]}
+tracing = "0.1.37"
+tracing-subscriber = {version = "0.3.16", features = ["env-filter"]}
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
