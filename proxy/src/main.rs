@@ -1,6 +1,3 @@
-#[macro_use]
-extern crate lazy_static;
-
 use axum::response::IntoResponse;
 use axum::routing::{get, post};
 use axum::Router;
@@ -9,7 +6,6 @@ use hyper::body::Bytes;
 use hyper::{Body, Client, Request, Response, StatusCode, Uri};
 use hyper::{HeaderMap, Method};
 
-use std::collections::HashMap;
 use std::fmt;
 use std::net::SocketAddr;
 use tower_http::cors::{Any, CorsLayer};
@@ -18,32 +14,11 @@ use tracing_subscriber::util::SubscriberInitExt;
 
 mod parsers;
 
-// register the services
-lazy_static! {
-    static ref PROXY_SERVER: String = ServicePath::from_env("PROXY_SERVER", "http://0.0.0.0:5000");
-    static ref STUDENT_SERVICE: String =
-        ServicePath::from_env("MARTUS_STUDENT_SERVICE", "http://0.0.0.0:5001");
-    static ref STAFF_SERVICE: String =
-        ServicePath::from_env("MARTUS_STAFF_SERVICE", "http://0.0.0.0:5001");
-    static ref LIBRARY_SERVICE: String =
-        ServicePath::from_env("MARTUS_LIBRARY_SERVICE", "http://0.0.0.0:5003");
-    static ref HOSTEL_SERVICE: String =
-        ServicePath::from_env("MARTUS_HOSTEL_SERVICE", "http://0.0.0.0:5004");
-    pub static ref REGISTERED_SERVICES: HashMap<String, String> = HashMap::from([
-        ServicePath::from("student", STUDENT_SERVICE.to_string()),
-        ServicePath::from("staff", STAFF_SERVICE.to_string()),
-        ServicePath::from("library", LIBRARY_SERVICE.to_string()),
-        ServicePath::from("hostel", HOSTEL_SERVICE.to_string()),
-    ]);
-}
-
 #[tokio::main]
 async fn main() -> Result<(), hyper::Error> {
     // load env variables and the service configuration
 
     dotenv::dotenv().ok();
-    let val = parsers::parse_config("auth").unwrap();
-    println!("{:?}", val);
 
     tracing_subscriber::registry()
         .with(tracing_subscriber::EnvFilter::new(
@@ -72,7 +47,7 @@ async fn main() -> Result<(), hyper::Error> {
                 .put(handler)
                 .delete(handler),
         )
-        .route("/health", get(health_check))
+        .route("/", get(health_check))
         .layer(cors_layer)
         .fallback(handle_404);
 
@@ -117,16 +92,19 @@ impl ServicePath {
 
     // parse the url
     pub fn parse_url(path: Uri) -> String {
+        // split the path to extract service ID
         let path = path.path().split('/').collect::<Vec<&str>>();
 
         // detect the recipient server
         let service_id = path[2];
-        let service_base_url = REGISTERED_SERVICES.get(service_id).unwrap_or(&PROXY_SERVER); // SERVING THE REQUEST TO THE PROXY SERVER WOULD RETURN A 404 ERROR SINCE NO ROUTE WOULD BE MATCHED
         let resource_path = &path[3..].join("/");
 
-        let url = format!("{service_base_url}{resource_path}");
+        let service = parsers::parse_config(service_id).unwrap();
+        let service_base_url = service.base_url; // SERVING THE REQUEST TO THE PROXY SERVER WOULD RETURN A 404 ERROR SINCE NO ROUTE WOULD BE MATCHED
 
-        url
+        let request_url = format!("{service_base_url}{resource_path}");
+
+        request_url
     }
     // read the url from env
     fn from_env<'a>(key: &'a str, default: &'a str) -> std::string::String {
