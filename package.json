@@ -8,6 +8,6 @@
   "license": "BSD 2-Clause ",
   "private": false,
   "scripts": {
-    "watch:rust":"cd $PATH && cargo watch -x run"
+    "watch:rust":""
   }
 }

@@ -2,3 +2,4 @@
 .nx/installation
 .nx/cache
 dist/target
+sandbox
