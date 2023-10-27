@@ -53,38 +53,27 @@ The project is best managed with [nx](https://nx.dev) editor plugin
 
 _TO run a project from the command line, consider installing nx globally `npm  i -g nx`_
 
-#### Add a new Rust binary to the workspace
-
 ```sh
+#Add a new Rust binary to the workspace
 nx generate @monodon/rust:binary <project-name>
-```
 
-#### Add a new Rust library to the workspace
 
-```sh
+# Add a new Rust library to the workspace
 nx generate @monodon/rust:library <library-name>
-```
 
-#### Run a project
 
-```sh
+# Run a project
 nx run <project-name>:run
-```
 
-#### Test a project
 
-```sh
+#Test a project
 nx run <project-name>:test
-```
 
-#### Lint a project
-
-```sh
+# Lint a project
 nx run <project-name>:lint
+
+#see `nx --help` for more options
 ```
-
-see `nx --help` for more options
-
 ## Documentation
 
 See [martus.docs](./Martus.md)
