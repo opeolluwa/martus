@@ -1,0 +1,20 @@
+syntax = "proto3";
+package  martus_auth;
+
+
+service Auth {
+    // see the grpc server status
+    rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse);
+
+}
+
+// the health check is an empty object
+message HealthCheckRequest {
+}
+
+
+// the health check response response 
+message HealthCheckResponse {
+    string status  = 1;
+    string message = 2;
+}
