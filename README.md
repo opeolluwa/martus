@@ -26,7 +26,6 @@ The following are required to run the application locally
 - [Docker](https://www.docker.com) A platform designed to help developers build, share and run containerized applications
 - [PostgreSQL](https://postgresql.org) - Powerful and Open Source Object-relational database management system
 - [Apache Kafka](https://kafka.apache.org) - Open source distributed event streaming platform
-- [nx](https://nx.dev) - a smart, fast and extensible build system for monorepos
 - [NodeJS](https://nodejs.org) - Open source JavaScript runtime environment
 
 #### Technology Stack
@@ -49,31 +48,8 @@ cd martus
 
 ### Executing program
 
-The project is best managed with [nx](https://nx.dev) editor plugin
+The project is best managed docker compose
 
-_TO run a project from the command line, consider installing nx globally `npm  i -g nx`_
-
-```sh
-#Add a new Rust binary to the workspace
-nx generate @monodon/rust:binary <project-name>
-
-
-# Add a new Rust library to the workspace
-nx generate @monodon/rust:library <library-name>
-
-
-# Run a project
-nx run <project-name>:run
-
-
-#Test a project
-nx run <project-name>:test
-
-# Lint a project
-nx run <project-name>:lint
-
-#see `nx --help` for more options
-```
 ## Documentation
 
 See [martus.docs](./Martus.md)
