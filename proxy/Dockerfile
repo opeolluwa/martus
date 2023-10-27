@@ -13,6 +13,7 @@ FROM rust:${RUST_VERSION}-slim-bullseye AS build
 ARG APP_NAME
 WORKDIR /app
 
+RUN ls 
 # Build the application.
 # Leverage a cache mount to /usr/local/cargo/registry/
 # for downloaded dependencies and a cache mount to /app/target/ for 
@@ -32,6 +33,7 @@ cargo build --locked --release
 cp ./target/release/$APP_NAME /bin/server
 cp ./proxy.toml /bin/proxy.toml
 EOF
+
 
 ################################################################################
 # Create a new stage for running the application that contains the minimal
@@ -60,8 +62,9 @@ RUN adduser \
 USER appuser
 
 # Copy the executable from the "build" stage.
-COPY --from=build /bin/server /bin/
-COPY --from=build /bin/proxy.toml /bin/pro
+COPY --from=build /bin/ /bin/
+# COPY proxy.toml file from above
+# COPY --from=build /bin/proxy.toml /bin/proxy.toml
 # Expose the port that the application listens on.
 EXPOSE 5000
 
