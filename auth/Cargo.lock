@@ -112,6 +112,7 @@ dependencies = [
 name = "auth"
 version = "0.1.0"
 dependencies = [
+ "c-enum",
  "dotenv",
  "headers",
  "jsonwebtoken",
@@ -124,6 +125,7 @@ dependencies = [
  "tower-http",
  "tracing",
  "tracing-subscriber",
+ "uuid",
 ]
 
 [[package]]
@@ -245,6 +247,12 @@ name = "bytes"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a2bd12c1caf447e69cd4528f47f94d203fd2582878ecb9e9465484c4148a8223"
+
+[[package]]
+name = "c-enum"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8883dee7de1e38357323d49767550c9fd64fa5c60ae22f6b01ab2c5edcd1bf9e"
 
 [[package]]
 name = "cc"
@@ -2267,6 +2275,9 @@ name = "uuid"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "88ad59a7560b41a70d191093a945f0b87bc1deeda46fb237479708a1d6b6cdfc"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "valuable"
