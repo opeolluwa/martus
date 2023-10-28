@@ -39,7 +39,7 @@ message SignupRequest {
 
 // the signup response
 message SignUpResponse {
-    string status  = 1;
+    bool success  = 1;
     string message = 2;
 }
 
@@ -52,7 +52,7 @@ message LoginRequest {
 
 // the login response
 message LoginResponse {
-    string status  = 1;
+    bool success  = 1;
     string message = 2;
     string token = 3;
 }
@@ -64,7 +64,7 @@ message LogoutRequest {
 
 // the logout response
 message LogoutResponse {
-    string status  = 1;
+    bool success  = 1;
     string message = 2;
 }
 
@@ -75,7 +75,7 @@ message RefreshTokenRequest {
 
 // the refresh token response
 message RefreshTokenResponse {
-    string status  = 1;
+    bool success  = 1;
     string message = 2;
     string token = 3;
 }
@@ -87,7 +87,7 @@ message VerifyTokenRequest {
 
 // the verify token response
 message VerifyTokenResponse {
-    string status  = 1;
+    bool success  = 1;
     string message = 2;
 }
 
@@ -98,7 +98,7 @@ message VerifyEmailRequest {
 
 // the verify email response
 message VerifyEmailResponse {
-    string status  = 1;
+    bool success  = 1;
     string message = 2;
 }
 
@@ -109,7 +109,7 @@ message ForgotPasswordRequest {
 
 // the forgot password response
 message ForgotPasswordResponse {
-    string status  = 1;
+    bool success  = 1;
     string message = 2;
 }
 
@@ -121,7 +121,7 @@ message ResetPasswordRequest {
 
 // the reset password response
 message ResetPasswordResponse {
-    string status  = 1;
+    bool success  = 1;
     string message = 2;
 }               
 
@@ -134,6 +134,6 @@ message ChangePasswordRequest {
 
 // the change password response
 message ChangePasswordResponse {
-    string status  = 1;
+    bool success  = 1;
     string message = 2;
 }               
