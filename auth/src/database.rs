@@ -12,8 +12,8 @@ pub struct Database {}
 
 impl Database {
     pub async fn conn() -> Pool<Postgres> {
-        let database_connection_url =
-            std::env::var("DATABASE_URL").unwrap_or("postgres://opeolluwa:thunderstorm@localhost/martus_auth".to_string());
+        let database_connection_url = std::env::var("DATABASE_URL")
+            .unwrap_or("postgres://opeolluwa:thunderstorm@localhost/martus_auth".to_string());
 
         PgPoolOptions::new()
             .max_connections(5)
@@ -43,21 +43,32 @@ impl UserInformation {
     pub async fn new(user: UserInformationBuilder<'_>) -> Result<Self> {
         let database_pool_connection = Database::conn().await;
 
-        //hash the password
-        let hashed_password = hash(user.1, DEFAULT_COST)?;
+        let id = Uuid::new_v4();
+        let email = user.0;
+        let password = hash(user.1, DEFAULT_COST)?;
 
         let new_user = sqlx::query_as::<_, UserInformation>(
             r#"
-            INSERT INTO user_information (email, password)
-            VALUES ($1, $2)
-            RETURNING id, email, is_verified
+            INSERT INTO user_information (id, email, password)
+            VALUES ($1, $2, $3)
+            RETURNING *
             "#,
         )
-        .bind(user.0)
-        .bind(hashed_password)
+        .bind(id)
+        .bind(email)
+        .bind(password)
         .fetch_one(&database_pool_connection)
         .await?;
 
         Ok(new_user)
     }
+
+    // return the user without the password
+    pub fn serialize() {}
+
+    // update password
+    pub fn change_password() {}
+
+    // set verified
+    pub fn verify() {}
 }
