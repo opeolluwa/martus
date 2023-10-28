@@ -1,4 +1,4 @@
 {
-  "cSpell.words": ["Martus"],
+  "cSpell.words": ["Martus", "sqlx"],
   "rust-analyzer.cargo.buildScripts.enable": true
 }
