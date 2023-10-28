@@ -5,8 +5,20 @@ package  martus_auth;
 service Auth {
     // see the grpc server status
     rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse);
+    rpc SignUp (SignupRequest) returns (SignUpResponse);
+    rpc Login (LoginRequest) returns (LoginResponse);
+    rpc Logout (LogoutRequest) returns (LogoutResponse);
+    rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenResponse);
+    rpc VerifyToken (VerifyTokenRequest) returns (VerifyTokenResponse);
+    rpc VerifyEmail (VerifyEmailRequest) returns (VerifyEmailResponse);
+    rpc ForgotPassword (ForgotPasswordRequest) returns (ForgotPasswordResponse);
+    rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse);
+    rpc ChangePassword (ChangePasswordRequest) returns (ChangePasswordResponse);    
+
 
 }
+
+
 
 // the health check is an empty object
 message HealthCheckRequest {
@@ -18,3 +30,110 @@ message HealthCheckResponse {
     string status  = 1;
     string message = 2;
 }
+
+// the signup request
+message SignupRequest {
+    string email = 1; 
+    string password = 2;
+}
+
+// the signup response
+message SignUpResponse {
+    string status  = 1;
+    string message = 2;
+}
+
+
+// the login request
+message LoginRequest {
+    string email = 1; 
+    string password = 2;
+}
+
+// the login response
+message LoginResponse {
+    string status  = 1;
+    string message = 2;
+    string token = 3;
+}
+
+// the logout request
+message LogoutRequest {
+    string token = 1;
+}
+
+// the logout response
+message LogoutResponse {
+    string status  = 1;
+    string message = 2;
+}
+
+// the refresh token request
+message RefreshTokenRequest {
+    string token = 1;
+}
+
+// the refresh token response
+message RefreshTokenResponse {
+    string status  = 1;
+    string message = 2;
+    string token = 3;
+}
+
+// the verify token request
+message VerifyTokenRequest {
+    string token = 1;
+}
+
+// the verify token response
+message VerifyTokenResponse {
+    string status  = 1;
+    string message = 2;
+}
+
+// the verify email request
+message VerifyEmailRequest {
+    string token = 1;
+}
+
+// the verify email response
+message VerifyEmailResponse {
+    string status  = 1;
+    string message = 2;
+}
+
+// the forgot password request
+message ForgotPasswordRequest {
+    string email = 1;
+}
+
+// the forgot password response
+message ForgotPasswordResponse {
+    string status  = 1;
+    string message = 2;
+}
+
+// the reset password request
+message ResetPasswordRequest {
+    string token = 1;
+    string password = 2;
+}
+
+// the reset password response
+message ResetPasswordResponse {
+    string status  = 1;
+    string message = 2;
+}               
+
+// the change password request
+message ChangePasswordRequest {
+    string token = 1;
+    string oldPassword = 2;
+    string newPassword = 3;
+}
+
+// the change password response
+message ChangePasswordResponse {
+    string status  = 1;
+    string message = 2;
+}               
