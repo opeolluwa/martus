@@ -1,7 +1,7 @@
 use anyhow::{Ok, Result};
 use bcrypt::{hash, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
-use sqlx::{postgres::PgPoolOptions, Error, Pool, Postgres};
+use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use uuid::Uuid;
 #[derive(Debug)]
 
@@ -13,7 +13,7 @@ pub struct Database {}
 impl Database {
     pub async fn conn() -> Pool<Postgres> {
         let database_connection_url =
-            std::env::var("DATABASE_URL").expect("error parsing DATABASE_URL");
+            std::env::var("DATABASE_URL").unwrap_or("postgres://opeolluwa:thunderstorm@localhost/martus_auth".to_string());
 
         PgPoolOptions::new()
             .max_connections(5)

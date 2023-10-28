@@ -39,7 +39,10 @@ impl Auth for GrpcServer {
 
         // create the user
         let user = UserInformation::new(new_user).await;
+
+        println!("{:#?}", user);
         if !user.is_ok() {
+            println!("-----------------------------------------------------------------");
             return Err(tonic::Status::internal("error creating user"));
         }
         //TODO: send a verification email to the user

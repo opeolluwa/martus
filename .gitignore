@@ -3,3 +3,5 @@
 .nx/cache
 dist/target
 sandbox
+auth/.env
+auth/.env.test
