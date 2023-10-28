@@ -6,6 +6,8 @@ version = "0.1.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+anyhow = "1.0.75"
+bcrypt = "0.15.0"
 c-enum = "0.2.2"
 dotenv = "0.15.0"
 headers = "0.3.9"
