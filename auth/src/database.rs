@@ -1,5 +1,7 @@
+use anyhow::{Ok, Result};
+use bcrypt::{hash, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
-use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
+use sqlx::{postgres::PgPoolOptions, Error, Pool, Postgres};
 use uuid::Uuid;
 #[derive(Debug)]
 
@@ -13,13 +15,11 @@ impl Database {
         let database_connection_url =
             std::env::var("DATABASE_URL").expect("error parsing DATABASE_URL");
 
-        let database_pool_connection = PgPoolOptions::new()
+        PgPoolOptions::new()
             .max_connections(5)
             .connect(&database_connection_url)
             .await
-            .expect("error creating connection");
-
-        database_pool_connection
+            .expect("error creating connection")
     }
 }
 
@@ -40,21 +40,24 @@ impl<'a> UserInformationBuilder<'a> {
 }
 
 impl UserInformation {
-    pub async fn new(user: UserInformationBuilder<'_>) -> Self {
+    pub async fn new(user: UserInformationBuilder<'_>) -> Result<Self> {
         let database_pool_connection = Database::conn().await;
-        let user = sqlx::query_as::<_, UserInformation>(
+
+        //hash the password
+        let hashed_password = hash(user.1, DEFAULT_COST)?;
+
+        let new_user = sqlx::query_as::<_, UserInformation>(
             r#"
             INSERT INTO user_information (email, password)
             VALUES ($1, $2)
-            RETURNING id, email, password, is_verified
+            RETURNING id, email, is_verified
             "#,
         )
         .bind(user.0)
-        .bind(user.1)
+        .bind(hashed_password)
         .fetch_one(&database_pool_connection)
-        .await
-        .expect("error creating user");
+        .await?;
 
-        user
+        Ok(new_user)
     }
 }

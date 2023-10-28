@@ -24,8 +24,8 @@ pub struct SignupRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SignUpResponse {
-    #[prost(string, tag = "1")]
-    pub status: ::prost::alloc::string::String,
+    #[prost(bool, tag = "1")]
+    pub success: bool,
     #[prost(string, tag = "2")]
     pub message: ::prost::alloc::string::String,
 }
@@ -42,8 +42,8 @@ pub struct LoginRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LoginResponse {
-    #[prost(string, tag = "1")]
-    pub status: ::prost::alloc::string::String,
+    #[prost(bool, tag = "1")]
+    pub success: bool,
     #[prost(string, tag = "2")]
     pub message: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
@@ -60,8 +60,8 @@ pub struct LogoutRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LogoutResponse {
-    #[prost(string, tag = "1")]
-    pub status: ::prost::alloc::string::String,
+    #[prost(bool, tag = "1")]
+    pub success: bool,
     #[prost(string, tag = "2")]
     pub message: ::prost::alloc::string::String,
 }
@@ -76,8 +76,8 @@ pub struct RefreshTokenRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RefreshTokenResponse {
-    #[prost(string, tag = "1")]
-    pub status: ::prost::alloc::string::String,
+    #[prost(bool, tag = "1")]
+    pub success: bool,
     #[prost(string, tag = "2")]
     pub message: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
@@ -94,8 +94,8 @@ pub struct VerifyTokenRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct VerifyTokenResponse {
-    #[prost(string, tag = "1")]
-    pub status: ::prost::alloc::string::String,
+    #[prost(bool, tag = "1")]
+    pub success: bool,
     #[prost(string, tag = "2")]
     pub message: ::prost::alloc::string::String,
 }
@@ -110,8 +110,8 @@ pub struct VerifyEmailRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct VerifyEmailResponse {
-    #[prost(string, tag = "1")]
-    pub status: ::prost::alloc::string::String,
+    #[prost(bool, tag = "1")]
+    pub success: bool,
     #[prost(string, tag = "2")]
     pub message: ::prost::alloc::string::String,
 }
@@ -126,8 +126,8 @@ pub struct ForgotPasswordRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ForgotPasswordResponse {
-    #[prost(string, tag = "1")]
-    pub status: ::prost::alloc::string::String,
+    #[prost(bool, tag = "1")]
+    pub success: bool,
     #[prost(string, tag = "2")]
     pub message: ::prost::alloc::string::String,
 }
@@ -144,8 +144,8 @@ pub struct ResetPasswordRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ResetPasswordResponse {
-    #[prost(string, tag = "1")]
-    pub status: ::prost::alloc::string::String,
+    #[prost(bool, tag = "1")]
+    pub success: bool,
     #[prost(string, tag = "2")]
     pub message: ::prost::alloc::string::String,
 }
@@ -164,8 +164,8 @@ pub struct ChangePasswordRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ChangePasswordResponse {
-    #[prost(string, tag = "1")]
-    pub status: ::prost::alloc::string::String,
+    #[prost(bool, tag = "1")]
+    pub success: bool,
     #[prost(string, tag = "2")]
     pub message: ::prost::alloc::string::String,
 }
