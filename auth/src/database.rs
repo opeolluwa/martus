@@ -63,6 +63,34 @@ impl UserInformation {
         Ok(new_user)
     }
 
+    // get a user record
+    pub async fn fetch<'a>(email: &'a str) -> Result<Self> {
+        let database_pool_connection = Database::conn().await;
+        let user = sqlx::query_as::<_, UserInformation>(
+            r#"
+        SELECT * FROM user_information WHERE email=$1
+        "#,
+        )
+        .bind(email)
+        .fetch_one(&database_pool_connection)
+        .await?;
+
+        Ok(user)
+    }
+
+    pub async fn validate_password<'a>(&self, password: &'a str) -> Result<bool> {
+        let database_pool_connection = Database::conn().await;
+        let user = sqlx::query_as::<_, UserInformation>(
+            r#"
+        SELECT * FROM user_information WHERE email=$1
+        "#,
+        )
+        .bind(&self.email)
+        .fetch_one(&database_pool_connection)
+        .await?;
+
+        Ok(bcrypt::verify(password, &user.password)?)
+    }
     // return the user without the password
     pub fn serialize() {}
 

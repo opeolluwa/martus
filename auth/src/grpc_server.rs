@@ -1,5 +1,7 @@
 use crate::{
     database::{UserInformation, UserInformationBuilder},
+    jwt::{Claim, Jwt},
+    mailer::{EmailTemplate, Mailer},
     martus_auth::{
         auth_server::Auth, ChangePasswordRequest, ChangePasswordResponse, ForgotPasswordRequest,
         ForgotPasswordResponse, HealthCheckRequest, HealthCheckResponse, LoginRequest,
@@ -43,7 +45,11 @@ impl Auth for GrpcServer {
         if !user.is_ok() {
             return Err(tonic::Status::internal("error creating user"));
         }
-        //TODO: send a verification email to the user
+
+        // send a verification email to the user
+        Mailer::new(&payload.email, EmailTemplate::Signup)
+            .send()
+            .await;
 
         // build the response
         let response = SignUpResponse {
@@ -56,9 +62,37 @@ impl Auth for GrpcServer {
 
     async fn login(
         &self,
-        _request: tonic::Request<LoginRequest>,
+        request: tonic::Request<LoginRequest>,
     ) -> std::result::Result<tonic::Response<LoginResponse>, tonic::Status> {
-        todo!()
+        let LoginRequest { email, password } = request.into_inner();
+
+        // validate the user credentials
+        let user = UserInformation::fetch(&email).await;
+        if !user.is_ok() {
+            return Err(tonic::Status::internal(
+                "no user with proved credentials was found",
+            ));
+        }
+
+        let user = user.unwrap();
+        let Some(is_correct_password) = user.validate_password(&password).await.ok() else {
+            return Err(tonic::Status::internal("invalid username or password"));
+        };
+
+        if !is_correct_password {
+            return Err(tonic::Status::internal("invalid username or password"));
+        }
+
+        // sign the JWT
+        let claim = Claim {};
+        let jwt = Jwt::new(claim).sign().await;
+        let response = LoginResponse {
+            success: true,
+            message: "user successfully logged in".to_string(),
+            token: jwt,
+        };
+
+        Ok(Response::new(response))
     }
 
     async fn logout(

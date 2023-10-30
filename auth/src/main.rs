@@ -4,8 +4,9 @@ use tonic::transport::Server;
 
 pub mod database;
 mod grpc_server;
+pub mod jwt;
+pub mod mailer;
 pub mod martus_auth;
-
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //parse env
@@ -18,8 +19,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let server_address = SocketAddr::from(([0, 0, 0, 0], 5001));
     let server = grpc_server::GrpcServer::default();
-
- 
 
     //TODO: run  migrations
     // sqlx::migrate!("./migrations")
