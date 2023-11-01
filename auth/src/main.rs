@@ -7,6 +7,7 @@ mod grpc_server;
 pub mod jwt;
 pub mod mailer;
 pub mod martus_auth;
+pub mod constants;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //parse env
