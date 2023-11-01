@@ -18,7 +18,7 @@
         <!--title-->
         <mj-column>
           <mj-text font-size="24px" font-weight="bold" line-height="30px" font-family="Urbanist, arial, 'san-serif'">
-            Password Changed!
+            Welcome!
           </mj-text>
         </mj-column>
       </mj-section>
@@ -28,10 +28,10 @@
             Dear [School Name] Team,
           </mj-text>
           <mj-text font-size="18px" line-height="30px" font-family="Urbanist, arial, 'san-serif'">
-            We hope this message finds you well. This is to inform you that your password for [Your Account/Platform] has been successfully changed. The security of your account is of utmost importance to us, and we want to ensure that your information remains safe and secure.
+            We're thrilled to welcome you to [Your School Management Software] – your comprehensive solution for efficient and effective school management. Our team is excited to support you in streamlining your processes, enhancing communication, and fostering a seamless educational experience.
           </mj-text>
           <mj-text font-size="18px" line-height="30px" font-family="Urbanist, arial, 'san-serif'">
-          If you did not initiate this password change or if you have any concerns about the security of your account, please contact our support team immediately at [Support Email/Phone]. We will investigate any unauthorized activity promptly.
+            If you have any questions or need assistance, our support team is here to help. Feel free to reach out to [Support Email/Phone] at any time.
           </mj-text>
           <mj-text font-size="18px" line-height="30px" font-family="Urbanist, arial, 'san-serif'">
             Thank you for choosing [Your School Management Software]. We look forward to supporting your school's success!
