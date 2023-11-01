@@ -26,10 +26,10 @@ impl Database {
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct UserInformation {
-    id: Uuid,
-    email: String,
-    password: String,
-    is_verified: bool,
+    pub id: Uuid,
+    pub email: String,
+    pub password: String,
+    pub is_verified: bool,
 }
 
 pub struct UserInformationBuilder<'a>(&'a str, &'a str);

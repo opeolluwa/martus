@@ -28,6 +28,8 @@ pub struct SignUpResponse {
     pub success: bool,
     #[prost(string, tag = "2")]
     pub message: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub token: ::prost::alloc::string::String,
 }
 /// the login request
 #[allow(clippy::derive_partial_eq_without_eq)]
