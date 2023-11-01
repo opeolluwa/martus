@@ -52,9 +52,16 @@ impl Auth for GrpcServer {
             .await;
 
         // build the response
+        let user = user.unwrap();
+        let claim = Claim {
+            id: user.id.to_string(),
+            email: user.email,
+        };
+        let jwt = Jwt::new(claim).sign().await;
         let response = SignUpResponse {
             success: true,
             message: "User created successfully".to_string(),
+            token: jwt.unwrap(),
         };
 
         Ok(Response::new(response))
@@ -84,12 +91,15 @@ impl Auth for GrpcServer {
         }
 
         // sign the JWT
-        let claim = Claim {};
+        let claim = Claim {
+            id: user.id.to_string(),
+            email: user.email,
+        };
         let jwt = Jwt::new(claim).sign().await;
         let response = LoginResponse {
             success: true,
             message: "user successfully logged in".to_string(),
-            token: jwt,
+            token: jwt.unwrap(),
         };
 
         Ok(Response::new(response))
