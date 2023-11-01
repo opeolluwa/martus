@@ -47,7 +47,7 @@ impl Auth for GrpcServer {
         }
 
         // send a verification email to the user
-        Mailer::new(&payload.email, EmailTemplate::Signup)
+        let _ = Mailer::new(&payload.email, EmailTemplate::Signup)
             .send()
             .await;
 
