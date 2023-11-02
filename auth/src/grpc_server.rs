@@ -39,17 +39,25 @@ impl Auth for GrpcServer {
         let payload = request.into_inner();
         let new_user = UserInformationBuilder::new(&payload.email, &payload.password);
 
+        //see if creds exist
+        let account_exist = UserInformation::creds_exists(&payload.email).await.unwrap();
+        if account_exist {
+            return Err(tonic::Status::invalid_argument("Account already exists"));
+        }
+
         // create the user
-        let user = UserInformation::new(new_user).await;
+        let user: Result<UserInformation, anyhow::Error> = UserInformation::new(new_user).await;
 
         if !user.is_ok() {
             return Err(tonic::Status::internal("error creating user"));
         }
 
         // send a verification email to the user
-        let _ = Mailer::new(&payload.email, EmailTemplate::Signup)
+        let status = Mailer::new(&payload.email, EmailTemplate::Signup)
             .send()
-            .await;
+            .await
+            .unwrap();
+        println!("{:?}", status);
 
         // build the response
         let user = user.unwrap();
@@ -142,15 +150,61 @@ impl Auth for GrpcServer {
 
     async fn reset_password(
         &self,
-        _request: tonic::Request<ResetPasswordRequest>,
+        request: tonic::Request<ResetPasswordRequest>,
     ) -> std::result::Result<tonic::Response<ResetPasswordResponse>, tonic::Status> {
-        todo!()
+        let payload = request.into_inner();
+        let user_data = Jwt::decode(&payload.token).ok();
+
+        if user_data.is_none() {
+            return Err(tonic::Status::internal("invalid username or password"));
+        }
+        let user_data = user_data.unwrap();
+
+        let user = UserInformation::fetch(&user_data.email).await;
+        if !user.is_ok() {
+            return Err(tonic::Status::internal(
+                "no user with proved credentials was found",
+            ));
+        }
+        let response = ResetPasswordResponse {
+            success: true,
+            message: "please see your email for further instruction".to_string(),
+        };
+        Ok(Response::new(response))
     }
 
     async fn change_password(
         &self,
-        _request: tonic::Request<ChangePasswordRequest>,
+        request: tonic::Request<ChangePasswordRequest>,
     ) -> std::result::Result<tonic::Response<ChangePasswordResponse>, tonic::Status> {
-        todo!()
+        let payload = request.into_inner();
+        let user_data = Jwt::decode(&payload.token).ok();
+
+        if user_data.is_none() {
+            return Err(tonic::Status::internal("invalid username or password"));
+        }
+        let user_data = user_data.unwrap();
+
+        let user = UserInformation::fetch(&user_data.email).await;
+        if !user.is_ok() {
+            return Err(tonic::Status::internal(
+                "no user with proved credentials was found",
+            ));
+        }
+
+        // compare the strings
+        if &payload.new_password != &payload.confirm_password {
+            return Err(tonic::Status::internal("password does not match"));
+        }
+
+        let new_password = payload.new_password.trim();
+        let _ = UserInformation::change_password(&user_data.email, new_password).await;
+
+        let response = ChangePasswordResponse {
+            success: true,
+            message: "password updates successfully".to_string(),
+        };
+
+        Ok(Response::new(response))
     }
 }

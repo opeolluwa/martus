@@ -40,7 +40,7 @@ impl Jwt {
     }
 
     // decode the jwt
-    pub async fn decode(token: &str) -> Result<Claim> {
+    pub fn decode(token: &str) -> Result<Claim> {
         let jtw_secret = env::var("JWT_SECRET")?;
         let token = decode::<Claim>(
             &token,
