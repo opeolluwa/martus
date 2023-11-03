@@ -158,7 +158,7 @@ pub struct ChangePasswordRequest {
     #[prost(string, tag = "1")]
     pub token: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
-    pub old_password: ::prost::alloc::string::String,
+    pub confirm_password: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub new_password: ::prost::alloc::string::String,
 }

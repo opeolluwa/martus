@@ -1,5 +1,5 @@
 use anyhow::{Ok, Result};
-use kafka::producer::{AsBytes, Producer, Record, RequiredAcks};
+use kafka::producer::{AsBytes, Producer, Record, RequiredAcks, DEFAULT_ACK_TIMEOUT_MILLIS};
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::time::Duration;
@@ -38,7 +38,12 @@ impl EmailTemplate {
 /// the AsBytes trait is required by kafka
 impl AsBytes for Mailer {
     fn as_bytes(&self) -> &[u8] {
-        todo!()
+        /*   (
+            self.email.as_bytes(),
+            self.subject.as_bytes(),
+            self.template.as_bytes(),
+        ).as_bytes() */
+        self.email.as_bytes()
     }
 }
 /// the email builder enforces correct positional argument for the mailer constructor
@@ -57,17 +62,19 @@ impl Mailer {
     }
 
     pub async fn send(&self) -> Result<()> {
-        let timeout = 30u64;
+        let timeout = DEFAULT_ACK_TIMEOUT_MILLIS;
         let acks = RequiredAcks::One;
-        let kafka_host = env::var("KAFKArec_HOST")?;
-        let payload = self;
-        let mut producer = Producer::from_hosts(vec![kafka_host])
-            .with_ack_timeout(Duration::from_secs(timeout))
+        let kafka_host = env::var("KAFKA_HOST")?;
+        let payload = serde_json::to_string(self).unwrap();
+        let mut producer = Producer::from_hosts(vec!["genuine-lizard-6298-us1-kafka.upstash.io:9092".to_owned()])
+            .with_ack_timeout(Duration::from_millis(timeout))
             .with_required_acks(acks)
-            .create()?;
+            .create()
+            .unwrap();
         let record = Record::from_value(EMAIL_QUEUE, payload.as_bytes());
         // add email to the queue
-        _ = producer.send(&record);
+        let status = producer.send(&record);
+        println!("{:#?}", status);
         Ok(())
     }
 }

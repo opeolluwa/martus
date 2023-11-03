@@ -129,7 +129,7 @@ message ResetPasswordResponse {
 // the change password request
 message ChangePasswordRequest {
     string token = 1;
-    string oldPassword = 2;
+    string confirmPassword = 2;
     string newPassword = 3;
 }
 

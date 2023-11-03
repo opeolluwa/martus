@@ -95,8 +95,40 @@ impl UserInformation {
     pub fn serialize() {}
 
     // update password
-    pub fn change_password() {}
+    pub async fn change_password<'a>(email: &'a str, password: &'a str) -> Result<UserInformation> {
+        let database_pool_connection = Database::conn().await;
+        let user = sqlx::query_as::<_, UserInformation>(
+            r#"
+            UPDATE user_information SET password=$1 WHERE email=$2
+            RETURNING *
+        "#,
+        )
+        .bind(email)
+        .bind(password)
+        .fetch_one(&database_pool_connection)
+        .await
+        .ok()
+        .unwrap();
+
+        Ok(user)
+    }
 
     // set verified
     pub fn verify() {}
+
+    // creds_exists
+    pub async fn creds_exists<'a>(email: &'a str) -> Result<bool> {
+        let database_pool_connection = Database::conn().await;
+        let user = sqlx::query_as::<_, UserInformation>(
+            r#"
+        SELECT * FROM user_information WHERE email=$1
+        "#,
+        )
+        .bind(email)
+        .fetch_one(&database_pool_connection)
+        .await
+        .ok();
+
+        Ok(user.is_some())
+    }
 }
