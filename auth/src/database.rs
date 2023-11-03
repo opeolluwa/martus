@@ -3,6 +3,8 @@ use bcrypt::{hash, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use uuid::Uuid;
+
+use crate::jwt::Jwt;
 #[derive(Debug)]
 
 /// the database is reusable outside to module
@@ -30,6 +32,13 @@ pub struct UserInformation {
     pub email: String,
     pub password: String,
     pub is_verified: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct BlacklistedJwt {
+    pub id: Uuid,
+    pub email: String,
 }
 
 pub struct UserInformationBuilder<'a>(&'a str, &'a str);
@@ -63,21 +72,6 @@ impl UserInformation {
         Ok(new_user)
     }
 
-    // get a user record
-    pub async fn fetch<'a>(email: &'a str) -> Result<Self> {
-        let database_pool_connection = Database::conn().await;
-        let user = sqlx::query_as::<_, UserInformation>(
-            r#"
-        SELECT * FROM user_information WHERE email=$1
-        "#,
-        )
-        .bind(email)
-        .fetch_one(&database_pool_connection)
-        .await?;
-
-        Ok(user)
-    }
-
     pub async fn validate_password<'a>(&self, password: &'a str) -> Result<bool> {
         let database_pool_connection = Database::conn().await;
         let user = sqlx::query_as::<_, UserInformation>(
@@ -91,8 +85,6 @@ impl UserInformation {
 
         Ok(bcrypt::verify(password, &user.password)?)
     }
-    // return the user without the password
-    pub fn serialize() {}
 
     // update password
     pub async fn change_password<'a>(email: &'a str, password: &'a str) -> Result<UserInformation> {
@@ -114,8 +106,35 @@ impl UserInformation {
     }
 
     // set verified
-    pub fn verify() {}
+    pub async fn set_verified<'a>(email: &'a str) -> Result<bool> {
+        let database_pool_connection = Database::conn().await;
+        let user = sqlx::query_as::<_, UserInformation>(
+            r#"
+        ALTER user_information SET is_verified=true WHERE email=$1
+        "#,
+        )
+        .bind(email)
+        .fetch_one(&database_pool_connection)
+        .await
+        .ok();
 
+        Ok(user.is_some())
+    }
+
+    // get a user record
+    pub async fn fetch<'a>(email: &'a str) -> Result<Self> {
+        let database_pool_connection = Database::conn().await;
+        let user = sqlx::query_as::<_, UserInformation>(
+            r#"
+        SELECT * FROM user_information WHERE email=$1
+        "#,
+        )
+        .bind(email)
+        .fetch_one(&database_pool_connection)
+        .await?;
+
+        Ok(user)
+    }
     // creds_exists
     pub async fn creds_exists<'a>(email: &'a str) -> Result<bool> {
         let database_pool_connection = Database::conn().await;
@@ -130,5 +149,9 @@ impl UserInformation {
         .ok();
 
         Ok(user.is_some())
+    }
+
+    pub async fn logout<'a>(token: &'a str) {
+        Jwt::blacklist(token).await;
     }
 }
