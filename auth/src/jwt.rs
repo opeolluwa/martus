@@ -2,6 +2,9 @@ use anyhow::Result;
 use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};
 use std::env;
+use uuid::Uuid;
+
+use crate::database::{BlacklistedJwt, Database};
 /// the jwt module provides helpers amd mechanism
 /// for encrypting and decrypting json web token
 /// it uses EdSCA algorithm
@@ -48,6 +51,20 @@ impl Jwt {
             &Validation::default(),
         )?;
         Ok(token.claims)
+    }
+
+    pub async fn blacklist<'a>(token: &'a str) {
+        let database_pool_connection = Database::conn().await;
+        let record_id = Uuid::new_v4();
+        let _ = sqlx::query_as::<_, BlacklistedJwt>(
+            r#"
+        INSERT INTO blacklisted_jwt (id, token) VALUES ($1,$2) RETURNING *
+        "#,
+        )
+        .bind(record_id)
+        .bind(token)
+        .fetch_one(&database_pool_connection)
+        .await;
     }
 }
 

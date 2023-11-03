@@ -42,7 +42,7 @@ impl Auth for GrpcServer {
         //see if creds exist
         let account_exist = UserInformation::creds_exists(&payload.email).await.unwrap();
         if account_exist {
-            return Err(tonic::Status::invalid_argument("Account already exists"));
+            return Err(tonic::Status::already_exists("email already exist"));
         }
 
         // create the user
@@ -53,11 +53,10 @@ impl Auth for GrpcServer {
         }
 
         // send a verification email to the user
-        let status = Mailer::new(&payload.email, EmailTemplate::Signup)
+        let _ = Mailer::new(&payload.email, EmailTemplate::Signup)
             .send()
             .await
             .unwrap();
-        println!("{:?}", status);
 
         // build the response
         let user = user.unwrap();
@@ -84,18 +83,22 @@ impl Auth for GrpcServer {
         // validate the user credentials
         let user = UserInformation::fetch(&email).await;
         if !user.is_ok() {
-            return Err(tonic::Status::internal(
+            return Err(tonic::Status::already_exists(
                 "no user with proved credentials was found",
             ));
         }
 
         let user = user.unwrap();
         let Some(is_correct_password) = user.validate_password(&password).await.ok() else {
-            return Err(tonic::Status::internal("invalid username or password"));
+            return Err(tonic::Status::invalid_argument(
+                "invalid username or password",
+            ));
         };
 
         if !is_correct_password {
-            return Err(tonic::Status::internal("invalid username or password"));
+            return Err(tonic::Status::invalid_argument(
+                "invalid username or password",
+            ));
         }
 
         // sign the JWT
@@ -115,16 +118,62 @@ impl Auth for GrpcServer {
 
     async fn logout(
         &self,
-        _request: tonic::Request<LogoutRequest>,
+        request: tonic::Request<LogoutRequest>,
     ) -> std::result::Result<tonic::Response<LogoutResponse>, tonic::Status> {
-        todo!()
+        let payload = request.into_inner();
+        let user_data = Jwt::decode(&payload.token).ok();
+
+        if user_data.is_none() {
+            return Err(tonic::Status::unauthenticated(
+                "invalid or expired authorization token",
+            ));
+        }
+
+        let _ = UserInformation::logout(&payload.token).await;
+        let response = LogoutResponse {
+            success: true,
+            message: "user successfully logged out".to_string(),
+        };
+
+        Ok(Response::new(response))
     }
 
     async fn refresh_token(
         &self,
-        _request: tonic::Request<RefreshTokenRequest>,
+        request: tonic::Request<RefreshTokenRequest>,
     ) -> std::result::Result<tonic::Response<RefreshTokenResponse>, tonic::Status> {
-        todo!()
+        let payload = request.into_inner();
+
+        let user_data = Jwt::decode(&payload.token).ok();
+        if user_data.is_none() {
+            return Err(tonic::Status::aborted(
+                "invalid or expired JWT, please login to continue",
+            ));
+        }
+
+        let user_data = user_data.unwrap();
+        let refresh_token = Jwt::new(Claim {
+            email: user_data.email,
+            id: user_data.id,
+        })
+        .sign()
+        .await
+        .ok();
+
+        if refresh_token.is_none() {
+            return Err(tonic::Status::internal(
+                "something unexpected happened, please try again after some time",
+            ));
+        }
+
+        let refresh_token = refresh_token.unwrap();
+        let response = RefreshTokenResponse {
+            success: true,
+            message: "successfully generate a new refresh token".to_string(),
+            token: refresh_token,
+        };
+
+        Ok(Response::new(response))
     }
 
     async fn verify_token(
@@ -136,16 +185,52 @@ impl Auth for GrpcServer {
 
     async fn verify_email(
         &self,
-        _request: tonic::Request<VerifyEmailRequest>,
+        request: tonic::Request<VerifyEmailRequest>,
     ) -> std::result::Result<tonic::Response<VerifyEmailResponse>, tonic::Status> {
-        todo!()
+        let payload = request.into_inner();
+        let user_data = Jwt::decode(&payload.token).ok();
+
+        if user_data.is_none() {
+            return Err(tonic::Status::unauthenticated(
+                "invalid or expired authorization token",
+            ));
+        }
+
+        let user_data = user_data.unwrap();
+        let _ = UserInformation::set_verified(&user_data.email).await;
+
+        let response = VerifyEmailResponse {
+            success: true,
+            message: "account successfully verified".to_string(),
+        };
+
+        Ok(Response::new(response))
     }
 
     async fn forgot_password(
         &self,
-        _request: tonic::Request<ForgotPasswordRequest>,
+        request: tonic::Request<ForgotPasswordRequest>,
     ) -> std::result::Result<tonic::Response<ForgotPasswordResponse>, tonic::Status> {
-        todo!()
+        let payload = request.into_inner();
+
+        let user_data = UserInformation::fetch(&payload.email).await.ok();
+        if user_data.is_none() {
+            return Err(tonic::Status::not_found(
+                "user with the provided email was not found",
+            ));
+        }
+
+        let _ = Mailer::new(&payload.email, EmailTemplate::ForgottenPassword)
+            .send()
+            .await
+            .unwrap();
+
+        let response = ForgotPasswordResponse {
+            success: true,
+            message: "see email for further instructions".to_string(),
+        };
+
+        Ok(Response::new(response))
     }
 
     async fn reset_password(
