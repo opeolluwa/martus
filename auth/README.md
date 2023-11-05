@@ -86,8 +86,10 @@ Sent 1 request and received 1 response
 
 see [proto.sh](./proto.sh) for other tests
 
-
 ## Documentation
 
 TBC ..
 
+## License
+
+The project is licensed and distributed under [BSD 2-Clause License](./LICENSE)
