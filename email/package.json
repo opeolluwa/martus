@@ -23,6 +23,7 @@
     "@nestjs-modules/mailer": "^1.9.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/microservices": "^10.2.7",
     "@nestjs/platform-express": "^9.0.0",
     "ejs": "^3.1.9",
     "kafkajs": "^2.2.4",
