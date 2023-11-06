@@ -37,7 +37,6 @@ impl Auth for GrpcServer {
     ) -> std::result::Result<tonic::Response<SignUpResponse>, tonic::Status> {
         // get the payload
         let payload = request.into_inner();
-        let new_user = UserInformationBuilder::new(&payload.email, &payload.password);
 
         //see if creds exist
         let account_exist = UserInformation::creds_exists(&payload.email).await.unwrap();
@@ -46,6 +45,7 @@ impl Auth for GrpcServer {
         }
 
         // create the user
+        let new_user = UserInformationBuilder::new(&payload.email, &payload.password);
         let user: Result<UserInformation, anyhow::Error> = UserInformation::new(new_user).await;
 
         if !user.is_ok() {

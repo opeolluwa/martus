@@ -41,6 +41,14 @@ pub struct BlacklistedJwt {
     pub email: String,
 }
 
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct Otp {
+    pub id: Uuid,
+    pub exp: i64,
+    pub otp: String,
+}
+
 pub struct UserInformationBuilder<'a>(&'a str, &'a str);
 impl<'a> UserInformationBuilder<'a> {
     pub fn new(email: &'a str, password: &'a str) -> Self {
@@ -153,5 +161,9 @@ impl UserInformation {
 
     pub async fn logout<'a>(token: &'a str) {
         Jwt::blacklist(token).await;
+    }
+
+    pub async fn gen_otp(validity: i64) {
+        let _otp = Otp::new(validity).await;
     }
 }

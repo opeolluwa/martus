@@ -119,6 +119,8 @@ dependencies = [
  "headers",
  "jsonwebtoken",
  "kafka",
+ "num-bigint",
+ "otp_generator",
  "prost",
  "serde",
  "serde_json",
@@ -1220,6 +1222,15 @@ dependencies = [
  "libc",
  "pkg-config",
  "vcpkg",
+]
+
+[[package]]
+name = "otp_generator"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c3c04fa5e184d8eaff5533e761ef9a8aa41ab9bebc4fc3a39d4e336ddc2909f4"
+dependencies = [
+ "rand",
 ]
 
 [[package]]
