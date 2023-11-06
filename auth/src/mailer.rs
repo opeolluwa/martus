@@ -1,7 +1,8 @@
 use anyhow::{Ok, Result};
-use kafka::producer::{AsBytes, Producer, Record, RequiredAcks, DEFAULT_ACK_TIMEOUT_MILLIS};
+use kafka::producer::{Producer, Record, RequiredAcks, DEFAULT_ACK_TIMEOUT_MILLIS};
 use serde::{Deserialize, Serialize};
 use std::env;
+use std::fmt::Debug;
 use std::time::Duration;
 
 use crate::constants::EMAIL_QUEUE;
@@ -11,10 +12,11 @@ use crate::constants::EMAIL_QUEUE;
 ///
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Mailer {
+pub struct Mailer<T> {
     pub email: String,
     pub subject: String,
     pub template: String,
+    pub data: T,
 }
 
 #[derive(Debug)]
@@ -22,38 +24,30 @@ pub enum EmailTemplate {
     Signup,
     Welcome,
     PasswordReset,
+    ForgottenPassword,
 }
 
 // for each of the email template, return a tuple of string, containing the template and the subject name
 impl EmailTemplate {
     pub fn get_template(&self) -> (&str, &str) {
         match self {
-            EmailTemplate::Signup => ("signup", "Welcome to Martus"),
+            EmailTemplate::Signup => ("sign-up", "Welcome to Martus"),
             EmailTemplate::Welcome => ("welcome", "Welcome to Martus"),
-            EmailTemplate::PasswordReset => ("password_reset", "Martus Password Reset"),
+            EmailTemplate::PasswordReset => ("password-update", "Martus Password Reset"),
+            EmailTemplate::ForgottenPassword => ("forgotten-password", "Password Reset"),
         }
     }
 }
 
-/// the AsBytes trait is required by kafka
-impl AsBytes for Mailer {
-    fn as_bytes(&self) -> &[u8] {
-        /*   (
-            self.email.as_bytes(),
-            self.subject.as_bytes(),
-            self.template.as_bytes(),
-        ).as_bytes() */
-        self.email.as_bytes()
-    }
-}
 /// the email builder enforces correct positional argument for the mailer constructor
 pub struct MailBuilder<'a>(pub &'a str, pub EmailTemplate);
 
-impl Mailer {
-    pub fn new<'a>(email: &'a str, template: EmailTemplate) -> Self {
+impl<'a, T: Serialize + Debug + Deserialize<'a>> Mailer<T> {
+    pub fn new(email: &'a str, template: EmailTemplate, data: T) -> Self {
         let (email_template, email_subject) = template.get_template();
 
         let mailer = Mailer {
+            data,
             email: email.to_string(),
             subject: email_subject.to_string(),
             template: email_template.to_string(),
@@ -66,15 +60,14 @@ impl Mailer {
         let acks = RequiredAcks::One;
         let kafka_host = env::var("KAFKA_HOST")?;
         let payload = serde_json::to_string(self).unwrap();
-        let mut producer = Producer::from_hosts(vec!["genuine-lizard-6298-us1-kafka.upstash.io:9092".to_owned()])
+        let mut producer = Producer::from_hosts(vec![kafka_host.to_owned()])
             .with_ack_timeout(Duration::from_millis(timeout))
             .with_required_acks(acks)
             .create()
             .unwrap();
         let record = Record::from_value(EMAIL_QUEUE, payload.as_bytes());
         // add email to the queue
-        let status = producer.send(&record);
-        println!("{:#?}", status);
+        let _ = producer.send(&record);
         Ok(())
     }
 }

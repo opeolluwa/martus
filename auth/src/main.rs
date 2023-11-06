@@ -2,12 +2,13 @@ use martus_auth::auth_server::AuthServer;
 use std::net::SocketAddr;
 use tonic::transport::Server;
 
+pub mod constants;
 pub mod database;
 mod grpc_server;
 pub mod jwt;
 pub mod mailer;
 pub mod martus_auth;
-pub mod constants;
+pub mod otp;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //parse env
