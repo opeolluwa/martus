@@ -2,6 +2,7 @@ use anyhow::{Ok, Result};
 use kafka::producer::{Producer, Record, RequiredAcks, DEFAULT_ACK_TIMEOUT_MILLIS};
 use serde::{Deserialize, Serialize};
 use std::env;
+use std::fmt::Debug;
 use std::time::Duration;
 
 use crate::constants::EMAIL_QUEUE;
@@ -11,10 +12,11 @@ use crate::constants::EMAIL_QUEUE;
 ///
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Mailer {
+pub struct Mailer<T> {
     pub email: String,
     pub subject: String,
     pub template: String,
+    pub data: T,
 }
 
 #[derive(Debug)]
@@ -40,11 +42,12 @@ impl EmailTemplate {
 /// the email builder enforces correct positional argument for the mailer constructor
 pub struct MailBuilder<'a>(pub &'a str, pub EmailTemplate);
 
-impl Mailer {
-    pub fn new<'a>(email: &'a str, template: EmailTemplate) -> Self {
+impl<'a, T: Serialize + Debug + Deserialize<'a>> Mailer<T> {
+    pub fn new(email: &'a str, template: EmailTemplate, data: T) -> Self {
         let (email_template, email_subject) = template.get_template();
 
         let mailer = Mailer {
+            data,
             email: email.to_string(),
             subject: email_subject.to_string(),
             template: email_template.to_string(),
