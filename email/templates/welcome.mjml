@@ -18,26 +18,27 @@
         <!--title-->
         <mj-column>
           <mj-text font-size="24px" font-weight="bold" line-height="30px" font-family="Urbanist, arial, 'san-serif'">
-            Welcome!
+            Welcome To Martus!
           </mj-text>
         </mj-column>
       </mj-section>
       <mj-section>
         <mj-column>
           <mj-text font-size="18px" line-height="30px" font-family="Urbanist, arial, 'san-serif'">
-            Dear [School Name] Team,
+            Dear <%=local.data.school%> Team,
           </mj-text>
           <mj-text font-size="18px" line-height="30px" font-family="Urbanist, arial, 'san-serif'">
-            We're thrilled to welcome you to [Your School Management Software] – your comprehensive solution for efficient and effective school management. Our team is excited to support you in streamlining your processes, enhancing communication, and fostering a seamless educational experience.
+            We're thrilled to welcome you to Martus School Management Software – your comprehensive solution for efficient and effective school management. Our team is excited to support you in streamlining your processes, enhancing communication, and fostering a seamless educational experience.
           </mj-text>
           <mj-text font-size="18px" line-height="30px" font-family="Urbanist, arial, 'san-serif'">
-            If you have any questions or need assistance, our support team is here to help. Feel free to reach out to [Support Email/Phone] at any time.
+            If you have any questions or need assistance, our support team is here to help. Feel free to reach out to us by filling <a href="#" />this form </a> at any time.
           </mj-text>
           <mj-text font-size="18px" line-height="30px" font-family="Urbanist, arial, 'san-serif'">
-            Thank you for choosing [Your School Management Software]. We look forward to supporting your school's success!
+            Thank you for choosing Martus School Management Software. We look forward to supporting your school's success!
           </mj-text>
-          <mj-text font-size="18px" line-height="20px" font-family="Urbanist, arial, 'san-serif'">
-            Best Regards
+          <mj-text font-size="18px" line-height="32px" font-family="Urbanist, arial, 'san-serif'" color="#0B0C14" padding-top="40px">
+            Best Regards<br />
+            Martus Team
           </mj-text>
         </mj-column>
       </mj-section>
