@@ -1,19 +1,9 @@
 <mjml>
-  <mj-head>
-    <mj-font name="Urbanist" href="https://fonts.googleapis.com/css2?family=Urbanist" />
-    <mj-style>
-      .black-text > *, .black-text{
-      color: #000000 !important;
-      }
-      .capitalize{
-      text-transform:capitalize
-      }
-    </mj-style>
-  </mj-head>
+
   <mj-spacer height="100px" />
   <mj-body background-color="#F9F9F9" width="605px">
     <!-- <mj-include path="./../components/header-basic.mjml" /> -->
-    <mj-wrapper background-color="#FCFCFC" border-radius="10px" padding="0 20px">
+    <mj-wrapper background-color="#FCFCFC" border-radius="10px" padding="0 5px">
       <mj-section>
         <!--title-->
         <mj-column>
@@ -31,7 +21,7 @@
       </mj-section>
       <mj-section>
         <mj-column width="100%">
-          <mj-button align="left" text-align="center" background-color="#006FF0" href="<%=locals.data.activateAccount%>" line-height="30px" font-size="16px" font-family="Urbanist, arial, 'san-serif'">
+          <mj-button align="left" text-align="center" background-color="#006FF0" href="<%=locals.otp%>" line-height="30px" font-size="16px" font-family="Urbanist, arial, 'san-serif'">
             <mj-group vertical-align="center" align="center" font-family="Urbanist, arial, 'san-serif'" font-weight="bold" vertical-align="middle">
               <mj-text>
                 Activate Account
@@ -39,11 +29,11 @@
             </mj-group>
           </mj-button>
           <mj-text font-family="Urbanist, arial, 'san-serif'" vertical-align="middle">
-            or visit the link in your browser: <a href="<%locals.resetPasswordUrl%>"><%locals.resetPasswordUrl% || ''%></a>
+            or visit the link in your browser: <a href="<%=locals.otp%>"><%=locals.otp%></a>
           </mj-text>
 
           <mj-text font-size="18px" line-height="32px" font-family="Urbanist, arial, 'san-serif'" color="#0B0C14" padding-top="40px">
-            If you didn&apos;t create an account on <a href="<%=locals.data.homepage%>">Martus</a>, or you received this message
+            If you didn&apos;t create an account on <a href="<%=locals.otp%>">Martus</a>, or you received this message
             in error, please disregard this mail
           </mj-text>
 
