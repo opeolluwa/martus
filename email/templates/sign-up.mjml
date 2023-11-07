@@ -21,17 +21,18 @@
             Account Activation
           </mj-text>
 
-          <mj-text font-size="18px" line-height="30px" font-family="Urbanist, arial, 'san-serif'">
+          <mj-text font-size="18px" line-height="32px" font-family="Urbanist, arial, 'san-serif'">
             Dear Subscriber,
           </mj-text>
-          <mj-text font-size="18px" line-height="30px" font-family="Urbanist, arial, 'san-serif'">
-            Thank you for signing up to use Martus services! To complete the registration process and ensure that you receive important updates and information, we kindly ask you to confirm your email address.
+          <mj-text font-size="18px" line-height="32px" font-family="Urbanist, arial, 'san-serif'">
+            <p> Thank you for signing up to use Martus services!</p>
+            <p>To complete the registration process and ensure that you receive important updates and information, we kindly ask you to confirm your email address.</p>
           </mj-text>
         </mj-column>
       </mj-section>
       <mj-section>
         <mj-column width="100%">
-          <mj-button align="left" text-align="center" background-color="#006FF0" href="<%=locals.otp%>" line-height="30px" font-size="16px" font-family="Urbanist, arial, 'san-serif'">
+          <mj-button align="center" text-align="center" background-color="#006FF0" href="<%=locals.otp%>" line-height="30px" font-size="16px" font-family="Urbanist, arial, 'san-serif'">
             <mj-group vertical-align="center" align="center" font-family="Urbanist, arial, 'san-serif'" font-weight="bold" vertical-align="middle">
               <mj-text>
                 Activate Account
@@ -42,12 +43,12 @@
             or visit the link in your browser: <a href="<%=locals.otp%>"><%=locals.otp%></a>
           </mj-text>
 
-          <mj-text font-size="18px" line-height="38px" font-family="Urbanist, arial, 'san-serif'" color="#0B0C14" padding-top="10px">
+          <mj-text font-size="18px" line-height="32px" font-family="Urbanist, arial, 'san-serif'" color="#0B0C14" padding-top="10px">
             If you didn&apos;t create an account on <a href="<%=locals.otp%>">Martus</a>, or you received this message
             in error, please disregard this mail
           </mj-text>
 
-          <mj-text font-size="18px" line-height="38px" font-family="Urbanist, arial, 'san-serif'" color="#0B0C14" padding-top="10px">
+          <mj-text font-size="18px" line-height="32px" font-family="Urbanist, arial, 'san-serif'" color="#0B0C14" padding-top="10px">
             Best Regards<br />
             Martus Team
           </mj-text>

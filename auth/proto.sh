@@ -3,7 +3,7 @@ rpcurl --vv --plaintext -proto ./proto/auth.proto -d '{}' 0.0.0.0:5001 martus_au
 
 
 # Sign up 
-grpcurl --vv --plaintext -proto ./proto/auth.proto -d '{"email":"examhssnnple@mailer.com", "password":"ddddd"}' 0.0.0.0:5001 martus_auth.Auth/SignUp
+grpcurl --vv --plaintext -proto ./proto/auth.proto -d '{"email":"adefemiadeoye@yahoo.com", "password":"ddddd"}' 0.0.0.0:5001 martus_auth.Auth/SignUp
 
 # login 
 grpcurl --vv --plaintext -proto ./proto/auth.proto -d '{"email":"examhssnnple@mailer.com", "password":"ddddd"}' 0.0.0.0:5001 martus_auth.Auth/Login

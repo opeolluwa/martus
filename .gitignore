@@ -5,3 +5,4 @@ dist/target
 sandbox
 auth/.env
 auth/.env.test
+email/.env

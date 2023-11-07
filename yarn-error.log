@@ -1,0 +1,48 @@
+Arguments: 
+  /home/drizzle/.nvm/versions/node/v20.8.0/bin/node /usr/local/bin/yarn add @nest/microservice
+
+PATH: 
+  /home/drizzle/.deno/bin:/home/drizzle/.local/share/solana/install/active_release/bin:/home/drizzle/.local/bin:/home/drizzle/.deno/bin:/home/drizzle/.nvm/versions/node/v20.8.0/bin:/home/drizzle/.local/share/solana/install/active_release/bin:/home/drizzle/.cargo/bin:/home/drizzle/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/usr/local/go/bin:/usr/local/go/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  20.8.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@nest%2fmicroservice: Not found
+      at params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66145:18)
+      at self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:140890:22)
+      at Request.emit (node:events:514:28)
+      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141862:10)
+      at Request.emit (node:events:514:28)
+      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141784:12)
+      at Object.onceWrapper (node:events:628:28)
+      at IncomingMessage.emit (node:events:526:35)
+      at endReadableNT (node:internal/streams/readable:1408:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+
+npm manifest: 
+  {
+    "name": "martus",
+    "version": "1.0.0",
+    "description": "yet another open source school management software",
+    "main": "index.js",
+    "repository": "https://github.com/opeolluwa/martus",
+    "author": "Adeoye Adefemi <adefemiadeoye@yahoo.com>",
+    "license": "BSD-2",
+    "private": false,
+    "scripts": {
+      "watch:auth": "sh scripts/watch-auth"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

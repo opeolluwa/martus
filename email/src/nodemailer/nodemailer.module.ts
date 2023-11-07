@@ -8,3 +8,4 @@ import { MailerModule } from '@nestjs-modules/mailer';
   imports: [MailerModule],
 })
 export class NodemailerModule {}
+
