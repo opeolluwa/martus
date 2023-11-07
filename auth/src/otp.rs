@@ -1,7 +1,16 @@
-use crate::database::{Database, Otp};
+use crate::database::Database;
 use anyhow::Result;
+use serde::{Deserialize, Serialize};
 use sqlx::types::chrono::Utc;
 use uuid::Uuid;
+
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct Otp {
+    pub id: Uuid,
+    pub exp: i64,
+    pub otp: String,
+}
 
 impl Otp {
     pub async fn new(validity: i64) -> Result<Self> {
@@ -19,8 +28,8 @@ impl Otp {
         // let exp: NaiveDateTime = NaiveDateTime::date(now).timestamp();
         let otp = sqlx::query_as::<_, Otp>(
             r#"
-                INSERT INTO otp (id, exp, otp)
-                VALUES ($1, $2, $3)
+                INSERT INTO one_time_passwords (id, exp, otp)
+                VALUES ($1, $2, $3) RETURNING *
             "#,
         )
         .bind(record_id)

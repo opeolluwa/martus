@@ -8,8 +8,9 @@ use crate::{
         LoginResponse, LogoutRequest, LogoutResponse, RefreshTokenRequest, RefreshTokenResponse,
         ResetPasswordRequest, ResetPasswordResponse, SignUpResponse, SignupRequest,
         VerifyEmailRequest, VerifyEmailResponse, VerifyTokenRequest, VerifyTokenResponse,
-    },
+    }, otp::Otp,
 };
+use serde_json::json;
 use tonic::Response;
 
 // impl
@@ -52,14 +53,21 @@ impl Auth for GrpcServer {
             return Err(tonic::Status::internal("error creating user"));
         }
 
-        // send a verification email to the user
-        let _ = Mailer::new(&payload.email, EmailTemplate::Signup, ())
-            .send()
-            .await
-            .unwrap();
-
-        // build the response
         let user = user.unwrap();
+        let Otp { otp, .. } = user.gen_otp(5).await.unwrap();
+
+        // send a verification email to the user
+        let _ = Mailer::new(
+            &payload.email,
+            EmailTemplate::Signup,
+            json!({
+                "otp": otp
+            }),
+        )
+        .send()
+        .await
+        .unwrap();
+
         let claim = Claim {
             id: user.id.to_string(),
             email: user.email,
