@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use uuid::Uuid;
 
-use crate::jwt::Jwt;
+use crate::{jwt::Jwt, otp::Otp};
 #[derive(Debug)]
 
 /// the database is reusable outside to module
@@ -25,10 +25,11 @@ impl Database {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct UserInformation {
     pub id: Uuid,
+    pub otp_id: Option<Uuid>,
     pub email: String,
     pub password: String,
     pub is_verified: bool,
@@ -39,14 +40,6 @@ pub struct UserInformation {
 pub struct BlacklistedJwt {
     pub id: Uuid,
     pub email: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
-#[serde(rename_all = "camelCase")]
-pub struct Otp {
-    pub id: Uuid,
-    pub exp: i64,
-    pub otp: String,
 }
 
 pub struct UserInformationBuilder<'a>(&'a str, &'a str);
@@ -163,7 +156,20 @@ impl UserInformation {
         Jwt::blacklist(token).await;
     }
 
-    pub async fn gen_otp(validity: i64) {
-        let _otp = Otp::new(validity).await;
+    // link user and otp
+    pub async fn gen_otp(&self, validity: i64) -> anyhow::Result<Otp> {
+        let otp = Otp::new(validity).await?;
+        let database_pool_connection = Database::conn().await;
+        let _ = sqlx::query_as::<_, UserInformation>(
+            r#"
+        UPDATE user_information SET otp_id=$1 WHERE email=$2
+        "#,
+        )
+        .bind(otp.id)
+        .bind(&self.email)
+        .fetch_one(&database_pool_connection)
+        .await
+        .ok();
+        Ok(otp)
     }
 }
