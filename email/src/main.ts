@@ -8,10 +8,15 @@ async function bootstrap() {
       transport: Transport.KAFKA,
       options: {
         client: {
-          brokers: ['localhost:5004'],
+          clientId: 'martus',
+          brokers: ['localhost:9092'],
+        },
+        consumer: {
+          groupId: 'email-queue',
         },
       },
     },
   );
+  await app.listen();
 }
 bootstrap();

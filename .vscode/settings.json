@@ -1,4 +1,4 @@
 {
-  "cSpell.words": ["Martus", "sqlx"],
+  "cSpell.words": ["Acks", "creds", "jsonwebtoken", "Martus", "proto", "sqlx"],
   "rust-analyzer.cargo.buildScripts.enable": true
 }

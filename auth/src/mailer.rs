@@ -67,7 +67,11 @@ impl<'a, T: Serialize + Debug + Deserialize<'a>> Mailer<T> {
             .unwrap();
         let record = Record::from_value(EMAIL_QUEUE, payload.as_bytes());
         // add email to the queue
-        let _ = producer.send(&record);
+        let status = producer.send(&record).ok();
+        match status {
+            Some(_) => println!("email sent"),
+            _ => println!("error sending email: ", ),
+        }
         Ok(())
     }
 }

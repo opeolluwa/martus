@@ -5,9 +5,13 @@
   "main": "index.js",
   "repository": "https://github.com/opeolluwa/martus",
   "author": "Adeoye Adefemi <adefemiadeoye@yahoo.com>",
-  "license": "BSD 2-Clause ",
+  "license": "BSD-2",
   "private": false,
   "scripts": {
-    "watch:rust":""
+    "watch:auth": "sh scripts/watch-auth",
+    "watch:rs": "cargo -Z unstable-options  -C $npm_config_path run"
+  },
+  "dependencies": {
+    "@nestjs/microservices": "^10.2.7"
   }
 }
