@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package  martus_auth;
+
+// the refresh token request
+message RefreshTokenRequest {
+    string token = 1;
+}
+
+// the refresh token response
+message RefreshTokenResponse {
+    bool success  = 1;
+    string message = 2;
+    string token = 3;
+}

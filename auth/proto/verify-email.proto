@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package  martus_auth;
+
+// the verify email request
+message VerifyEmailRequest {
+    string token = 1;
+}
+
+// the verify email response
+message VerifyEmailResponse {
+    bool success  = 1;
+    string message = 2;
+}

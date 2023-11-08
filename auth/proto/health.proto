@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package  martus_auth;
+
+// the health check is an empty object
+message HealthCheckRequest {
+}
+
+// the health check response response 
+message HealthCheckResponse {
+    string status  = 1;
+    string message = 2;
+}

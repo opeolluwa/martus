@@ -1,5 +1,16 @@
 syntax = "proto3";
+
 package  martus_auth;
+
+import "health.proto";
+import "sign-up.proto";
+import "login.proto";
+import "logout.proto";
+import "refresh-token.proto";
+import "verify-token.proto";
+import "forgot-password.proto";
+import "change-password.proto";
+import "verify-email.proto";
 
 
 service Auth {
@@ -15,104 +26,9 @@ service Auth {
     rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse);
     rpc ChangePassword (ChangePasswordRequest) returns (ChangePasswordResponse);    
 
-
 }
 
 
-
-// the health check is an empty object
-message HealthCheckRequest {
-}
-
-
-// the health check response response 
-message HealthCheckResponse {
-    string status  = 1;
-    string message = 2;
-}
-
-// the signup request
-message SignupRequest {
-    string email = 1; 
-    string password = 2;
-}
-
-// the signup response
-message SignUpResponse {
-    bool success  = 1;
-    string message = 2;
-    string token = 3;
-}
-
-
-// the login request
-message LoginRequest {
-    string email = 1; 
-    string password = 2;
-}
-
-// the login response
-message LoginResponse {
-    bool success  = 1;
-    string message = 2;
-    string token = 3;
-}
-
-// the logout request
-message LogoutRequest {
-    string token = 1;
-}
-
-// the logout response
-message LogoutResponse {
-    bool success  = 1;
-    string message = 2;
-}
-
-// the refresh token request
-message RefreshTokenRequest {
-    string token = 1;
-}
-
-// the refresh token response
-message RefreshTokenResponse {
-    bool success  = 1;
-    string message = 2;
-    string token = 3;
-}
-
-// the verify token request
-message VerifyTokenRequest {
-    string token = 1;
-}
-
-// the verify token response
-message VerifyTokenResponse {
-    bool success  = 1;
-    string message = 2;
-}
-
-// the verify email request
-message VerifyEmailRequest {
-    string token = 1;
-}
-
-// the verify email response
-message VerifyEmailResponse {
-    bool success  = 1;
-    string message = 2;
-}
-
-// the forgot password request
-message ForgotPasswordRequest {
-    string email = 1;
-}
-
-// the forgot password response
-message ForgotPasswordResponse {
-    bool success  = 1;
-    string message = 2;
-}
 
 // the reset password request
 message ResetPasswordRequest {
@@ -122,19 +38,6 @@ message ResetPasswordRequest {
 
 // the reset password response
 message ResetPasswordResponse {
-    bool success  = 1;
-    string message = 2;
-}               
-
-// the change password request
-message ChangePasswordRequest {
-    string token = 1;
-    string confirmPassword = 2;
-    string newPassword = 3;
-}
-
-// the change password response
-message ChangePasswordResponse {
     bool success  = 1;
     string message = 2;
 }               

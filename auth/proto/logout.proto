@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package  martus_auth;
+
+// the logout request
+message LogoutRequest {
+    string token = 1;
+}
+
+// the logout response
+message LogoutResponse {
+    bool success  = 1;
+    string message = 2;
+}

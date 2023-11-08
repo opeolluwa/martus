@@ -8,7 +8,8 @@ use crate::{
         LoginResponse, LogoutRequest, LogoutResponse, RefreshTokenRequest, RefreshTokenResponse,
         ResetPasswordRequest, ResetPasswordResponse, SignUpResponse, SignupRequest,
         VerifyEmailRequest, VerifyEmailResponse, VerifyTokenRequest, VerifyTokenResponse,
-    }, otp::Otp,
+    },
+    otp::Otp,
 };
 use serde_json::json;
 use tonic::Response;

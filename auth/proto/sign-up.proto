@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package  martus_auth;
+
+
+// the signup request
+message SignupRequest {
+    string email = 1; 
+    string password = 2;
+}
+
+// the signup response
+message SignUpResponse {
+    bool success  = 1;
+    string message = 2;
+    string token = 3;
+}
