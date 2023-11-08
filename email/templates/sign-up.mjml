@@ -13,14 +13,10 @@
   <mj-spacer height="100px" />
   <mj-body background-color="#F9F9F9" width="605px">
     <!-- <mj-include path="./../components/header-basic.mjml" /> -->
-    <mj-wrapper background-color="#FCFCFC" border-radius="10px" padding="0 20px">
+    <mj-wrapper background-color="#FCFCFC" border-radius="10px" padding="0 5px">
       <mj-section>
         <!--title-->
         <mj-column>
-          <mj-text font-size="24px" font-weight="bold" line-height="30px" font-family="Urbanist, arial, 'san-serif'">
-            Account Activation
-          </mj-text>
-
           <mj-text font-size="18px" line-height="32px" font-family="Urbanist, arial, 'san-serif'">
             Dear Subscriber,
           </mj-text>

@@ -10,7 +10,7 @@ import {
 export class KafkaService implements OnApplicationShutdown {
   // Connect to Kafka Server
   private readonly kafka = new Kafka({
-    brokers: ['localhost:9092'],
+    brokers: ['0.0.0.0:9092'],
   });
 
   private readonly consumers: Consumer[] = [];
