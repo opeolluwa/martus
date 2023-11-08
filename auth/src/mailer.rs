@@ -31,7 +31,7 @@ pub enum EmailTemplate {
 impl EmailTemplate {
     pub fn get_template(&self) -> (&str, &str) {
         match self {
-            EmailTemplate::Signup => ("sign-up", "Welcome to Martus"),
+            EmailTemplate::Signup => ("sign-up", "Account Activation"),
             EmailTemplate::Welcome => ("welcome", "Welcome to Martus"),
             EmailTemplate::PasswordReset => ("password-update", "Martus Password Reset"),
             EmailTemplate::ForgottenPassword => ("forgotten-password", "Password Reset"),
@@ -70,7 +70,7 @@ impl<'a, T: Serialize + Debug + Deserialize<'a>> Mailer<T> {
         let status = producer.send(&record).ok();
         match status {
             Some(_) => println!("email sent"),
-            _ => println!("error sending email: ", ),
+            _ => println!("error sending email: ",),
         }
         Ok(())
     }

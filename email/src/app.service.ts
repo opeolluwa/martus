@@ -15,13 +15,7 @@ export class AppService implements OnModuleInit {
       {
         eachMessage: async ({ topic, partition, message }) => {
           const value = message.value.toString();
-          console.log(`Received message ${value} from topic ${topic}`);
           this.mailer.sendEmail(JSON.parse(value));
-          console.log({
-            value: message.value.toString(),
-            topic: topic.toString(),
-            partition: partition.toString(),
-          });
         },
       },
     );
